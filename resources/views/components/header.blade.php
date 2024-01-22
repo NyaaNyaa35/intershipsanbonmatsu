@@ -1,13 +1,13 @@
 <div class="header-navigation" style="">
     <div class="row">
         {{-- Company Logo Navigation --}}
-        <div class="col-sm-12 col-md-2 image-section">
+        <div class="col-sm-12 col-md-2 col-lg-2 image-section">
             <a href="{{ url('/') }}" class="home-link">
                 <img src={{ asset("images/logo.png") }} alt="" class="logo-navbar">
             </a>
         </div>
         {{-- Feature Link Navigation --}}
-        <div class="col-sm-12 col-md-10 feature-container">
+        <div class="col-sm-12 col-md-10 col-lg-10 feature-container">
             <a href="{{ url('#') }}" class="icon-link p-t-16">
                 About us
             </a>
