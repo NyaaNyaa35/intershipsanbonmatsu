@@ -1,6 +1,8 @@
 /*[ FONT SIZE ]
 ///////////////////////////////////////////////////////////
 */
+.font-style {font-family: 'Montserrat';}
+
 .fs-1 {font-size: 1px;}
 .fs-2 {font-size: 2px;}
 .fs-3 {font-size: 3px;}
@@ -2229,6 +2231,8 @@
 /* ------------------------------------ */
 .text-white {color: white;}
 .text-black {color: black;}
+.text-gray {color : gray;}
+.text-red {color : red;}
 
 .text-hov-white:hover {color: white;}
 
