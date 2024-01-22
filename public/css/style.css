@@ -1,0 +1,110 @@
+.container {
+
+}
+
+a {
+    color : black !important;
+    text-decoration: none !important;
+}
+
+/* Header Section */
+
+.header-navigation {
+    display : flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    background-color: white;
+    color: black;
+    padding: 10px;
+}
+
+
+.header-navigation .row {
+    flex-direction: row;
+    align-items: center;
+}
+
+.logo-navbar{
+    width : 100%;
+    max-width: 150px;
+    margin-left : 10px;
+}
+
+.search-section{
+    margin : 0px 25px;
+}
+
+.form-searchbar {
+    border : 2px solid black;
+    border-radius: 25px;
+    display: flex ;
+    flex-direction: row ;
+    align-items: center;
+}
+
+.searchbar-navbar {
+    width : 100%;
+    max-height : 25px;
+    padding : 10px;
+    border-width: 0px !important;
+    border-radius: 25px;
+}
+
+.searchbar-navbar:focus {
+    outline: none;
+    border-color: #fff;
+}
+
+.searchbar-navbar:not(:placeholder-shown) {
+    border-color: #fff;
+}
+
+.search-icon {
+    margin : 0 15px;
+}
+
+.feature-container{
+    display : flex;
+    flex-direction: row;
+    font-size : 0.9em;
+    font-family: 'Montserrat';
+}
+
+.icon-link {
+    color : black;
+    margin : 0px 25px;
+    text-align: center;
+    transition: transform 0.3s ease;
+    font-size: 0.9em;
+}
+
+.login-button {
+    min-width: 55px;
+    background-color: red;
+    color : white !important;
+    display : flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 6px;
+    padding : 5px;
+}
+
+.icon-link:hover {
+    transform: scale(0.9) !important;
+}
+
+/* End Of Header Section */
+
+/* Start of Main Page Style */
+.navigation-text{
+    font-size : 0.75em;
+    font-family: 'Montserrat';
+}
+
+.product-container {
+    margin-top : 20px;
+}
+/* End of Main Page Style */
+@media screen and (max-width:768px){
+}
