@@ -6,6 +6,7 @@
     {{-- Header Section --}}
 <section class="header">
     @include('components.header')
+    @include('components.modal.searchModal')
 </section>
 {{-- End of Header Section --}}
 
@@ -16,20 +17,22 @@
         <div class="product-container">
             <div class="row">
                 @for ($i = 0 ; $i < count($product) ; $i++)
-                    <div class="col-md-3 product-spacer" id="image{{$product[$i]->id}}">
-                        <div class="product-box">
-                            <div class="product-image-container">
-                                <img class="product-image" src="{{url("images/products/" . $product[$i]->id . ".png")}}">
-                            </div>
-                            <div class="product-info-container">
-                                <div class="product-name"><b>{{ $product[$i]->product_name }}</b></div>
-                                <div class="product-price-container">
-                                    <div class="product-price"> ¥{{ $product[$i]->price }} </div>
-                                    <div class="product-size"> (税込)/{{ $product[$i]->size }}ml </div>
+                    <a href="{{ url($product[$i]->category, $product[$i]->product_name) }}" class="col-md-3">
+                        <div class="product-spacer" id="image{{$product[$i]->id}}">
+                            <div class="product-box">
+                                <div class="product-image-container">
+                                    <img class="product-image" src="{{url("images/products/". md5(md5($product[$i]->id)) ."/". md5(md5($product[$i]->id)) . ".png")}}">
+                                </div>
+                                <div class="product-info-container">
+                                    <div class="product-name"><b>{{ $product[$i]->category }}</b><br><b>{{ $product[$i]->product_name }}</b></div>
+                                    <div class="product-price-container">
+                                        <div class="product-price"> ¥{{ $product[$i]->price }} </div>
+                                        <div class="product-size"> (税込)/{{ $product[$i]->size }}ml </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
                 @endfor
             </div>
         </div>

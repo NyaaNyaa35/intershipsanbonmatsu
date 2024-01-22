@@ -20,7 +20,9 @@ Route::get('/', function () {
 });
 
 Route::get('/', [ApiController::class, 'show']);
+Route::get('/{category}/{name}', [ApiController::class, 'showSelectedProduct']);
+Route::get('/cart', [ApiController::class, 'showCart']);
+Route::post('/cart/add', [ApiController::class, 'insertCart']);
 
-
-Route::get('/Product', [ApiController::class, 'searchProduct']);
+// Route::get('/{category}', [ApiController::class, 'searchProduct']);
 

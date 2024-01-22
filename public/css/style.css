@@ -1,11 +1,36 @@
-.container {
-
-}
-
 a {
     color : black !important;
     text-decoration: none !important;
 }
+
+/* Backdrop Modal Section */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.7);
+}
+
+.modal-content {
+    position: relative;
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 100%;
+    max-width: 75%;
+}
+
+.close:hover {
+    cursor: pointer;
+}
+
+/* End Of Modal Section */
 
 /* Header Section */
 
@@ -17,6 +42,7 @@ a {
     background-color: white;
     color: black;
     padding: 10px;
+    margin-top : 10px;
 }
 
 
@@ -32,6 +58,13 @@ a {
     max-width: 150px;
 }
 
+@media screen and (min-width:1400px){
+    .logo-navbar{
+        width : 100%;
+        max-width: 300px;
+    }
+}
+
 @media screen and (max-width:1366px){
     .logo-navbar{
         margin-right : 25px;
@@ -39,6 +72,7 @@ a {
 }
 
 .search-section{
+    min-width : 200px;
     margin : 0px 25px;
 }
 
@@ -69,6 +103,12 @@ a {
 
 .search-icon {
     margin : 0 15px;
+    transition: transform 0.3s ease;
+}
+
+.search-icon:hover {
+    cursor: pointer;
+    transform: scale(0.95);
 }
 
 .feature-container{
@@ -85,10 +125,20 @@ a {
     transition: transform 0.3s ease;
     font-size: 1em;
 }
+.icon-link-transaction {
+    color : black;
+    margin : 0px 45px;
+    text-align: center;
+    transition: transform 0.3s ease;
+    font-size: 1em;
+}
 
 @media screen and (min-width:1400px){
     .icon-link {
-        margin : 0px 15px;
+        margin : 0px 35px;
+    }
+    .icon-link-transaction {
+        margin : 0px 50px;
     }
 }
 
@@ -96,11 +146,17 @@ a {
     .icon-link {
         margin : 0px 20px;
     }
+    .icon-link-transaction {
+        margin : 0px 40px;
+    }
 }
 
 @media screen and (max-width:1000px){
     .icon-link {
         margin : 0px 7px;
+    }
+    .icon-link-transaction {
+        margin : 0px 27px;
     }
 }
 
@@ -128,6 +184,10 @@ a {
     font-family: 'Montserrat';
 }
 
+.product-link{
+    width : 100%;
+}
+
 .product-container {
     margin-top : 20px;
 }
@@ -148,7 +208,7 @@ a {
     align-items: center;
     text-align: center;
     padding : 10px;
-    box-shadow: 3px 0 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
     border-radius : 12px;
 }
 
@@ -167,7 +227,7 @@ a {
 }
 
 .product-name {
-    font-size : 1em;
+    font-size : 0.95em;
 }
 
 .product-info-container{
@@ -193,6 +253,111 @@ a {
 .product-size {
     font-size : 0.75em;
 }
-/* End of Main Page Style */
-@media screen and (max-width:768px){
+
+@media screen and (min-width:1400px){
+    .product-price-container {
+        height : 120px;
+    }
+    .product-info-container{
+        height : 120px;
+    }
+    .product-name {
+        font-size : 1.2em;
+    }
+    .product-price {
+        font-size : 1.7em;
+        font-weight: bold;
+    }
+    .product-size {
+        font-size : 1em;
+    }
 }
+
+/* End of Main Page Style */
+
+/* Product Page Style */
+.main-pic{
+    width : 33%;
+    padding : 25px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.border-yellow{
+    border : 1px solid yellow;
+    margin-bottom : 5px;
+}
+
+.side-pic-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+.side-pic-container .border-yellow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.side-pic {
+    max-width : 66%;
+    padding : 5px;
+}
+.side-pic-image {
+    width: 100%;
+    padding : 3px;
+}
+.quantity-container {
+    display: flex;
+    flex-direction: row;
+}
+.stock-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.box-cream {
+    border : 1px solid white;
+    background-color: #f3f3f3;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+.box-cream:active {
+    transform: scale(0.95);
+}
+.button-container {
+    display: flex;
+    flex-direction: row;
+}
+.red-button {
+    width : 20%;
+    text-align: center;
+    background-color: red;
+    color : white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    padding : 5px;
+    border-radius: 8px;
+    border : none;
+}
+.green-button {
+    width : 20%;
+    text-align: center;
+    background-color: green;
+    color : white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    padding : 5px;
+    border-radius: 8px;
+    border : none;
+}
+.green-button:active{
+    transform: scale(0.95);
+}
+.red-button:active{
+    transform: scale(0.95);
+}
+
+/* End Product Page Style */
