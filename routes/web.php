@@ -19,10 +19,14 @@ Route::get('/', function () {
     return Redirect::to('/');
 });
 
+// Main Page Section
 Route::get('/', [ApiController::class, 'show']);
 Route::get('/{category}/{name}', [ApiController::class, 'showSelectedProduct']);
+
+// Cart Section
 Route::get('/cart', [ApiController::class, 'showCart']);
 Route::post('/cart/add', [ApiController::class, 'insertCart']);
+Route::delete('/cart/delete/{productName}', [ApiController::class, 'deleteCart']);
 
-// Route::get('/{category}', [ApiController::class, 'searchProduct']);
+Route::get('/Product', [ApiController::class, 'searchProduct']);
 

@@ -11,7 +11,7 @@
             <a href="{{ url('#') }}" class="icon-link-transaction p-t-16">
                 About us
             </a>
-            <a href="{{ url('#') }}" class="icon-link-transaction p-t-16">
+            <a href="{{ url('/') }}" class="icon-link-transaction p-t-16">
                 Beer
             </a>
             <a href="{{ url('#') }}" class="icon-link-transaction p-t-16">
