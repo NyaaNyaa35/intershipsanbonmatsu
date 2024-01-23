@@ -16,13 +16,15 @@
         <span class="navigation-text">Nikko Brewing >
             <a href="{{ url("/") }}" class="">Beer</a> >
             <a href="{{ url("Product/search?=". $product->category) }}" class="">{{ $product->category }}</a> >
-            <a href="{{ url("Product/search?". $product->product_name) }}" class=""><b class="">{{ $product->product_name }}</b></a>
+            <a href="{{ url("Product/search?=". $product->product_name) }}" class=""><b class="">{{ $product->product_name }}</b></a>
         </span>
         <div class="row product-container m-t-20">
+            {{-- Main Product Pic --}}
             <div class="col-md-4 col-12 main-pic border-yellow">
                 <img src="{{url("images/products/". md5(md5($product->id)) ."/". md5(md5($product->id)) . ".png")}}" alt="" class="">
             </div>
             <div class="col-md-2 col-12">
+                {{-- Product Side Pic --}}
                 <div class="side-pic-container">
                     <div class="side-pic border-yellow">
                         <img src="{{url("images/white-box.png")}}" alt="" class="side-pic-image">
@@ -36,6 +38,7 @@
                 </div>
             </div>
             <div class="col-md-6 col-12">
+                {{-- Product Information & Cart Action --}}
                 <div class="information-container" id="productName" data-product-name="{{ $product->product_name }}">
                     <h3 class="fs-30">
                         <b class="">
@@ -65,32 +68,41 @@
                         </div>
                         <div class="stock-container">
                             <div class="quantity-container">
-                                <button id="decreaseQuantity" class="fs-16 m-r-20 box-cream" >
+                                <button class="fs-16 m-r-20 box-cream bgwhite2" onclick="decreaseQuantity()" >
                                     -
                                 </button>
-                                <span id="displayQuantity" data-product-quantity="1" class="fs-16">
-                                    1
+                                <span id="displayQuantity" class="fs-16">
+                                    0
                                 </span>
-                                <button id="increaseQuantity" class="fs-16 m-l-20 box-cream">
+                                <button class="fs-16 m-l-20 box-cream bgwhite2" onclick="increaseQuantity()" >
                                     +
                                 </button>
                             </div>
                             <div class="text-red fs-12 m-t-5" id="productStockDisplay" data-product-stock="{{ $product->stock }}">
-                                Stock {{ $product->stock }}
+                                Stock <span id="displayStock">{{ $product->stock }}</span>
                             </div>
                         </div>
                     </div>
                     <form id="buyNowForm" action="{{ url('/cart/add') }}" method="post" class="m-t-5 m-b-5 button-container">
                         @csrf
                         <input type="hidden" name="productName" value="{{ $product->product_name }}">
-                        <input type="hidden" id="quantity" name="quantity" value=1 min="1">
+                        <input id="quantity" type="hidden" name="quantity" value="0" min="1">
 
-                        <button id="buyNowButton" class="red-button fs-13 m-r-20" type="button" onclick="openBuyNowModal()">Buy Now</button>
-                        <button class="green-button fs-13 m-r-20">Add to Cart</button>
+                        <button id="buyNowButton"
+                            class="red-button fs-13 m-r-20"
+                            type="button"
+                            onclick="openBuyNowModal()">
+                            Buy Now
+                        </button>
+                        <button id="addCartButton"
+                            class="green-button fs-13 m-r-20">
+                            Add to Cart
+                        </button>
                     </form>
                 </div>
             </div>
         </div>
+        {{-- Related Product --}}
         <div class="related-container">
             <div class="text-center m-t-50 m-b-20 fs-24">
                 <b class="">Related Products</b>
@@ -129,14 +141,45 @@
     function closeBuyNowModal(){
         document.getElementById('buyNowModal').style.display = 'none';
     }
-
     function submitBuyNowForm() {
         document.getElementById('buyNowForm').submit();
+    }
+
+    var $product = @json($product);
+
+    function decreaseQuantity(){
+        if($product.quantity > 0){
+            $product.quantity--;
+            let displayElement = document.getElementById('displayQuantity');
+            displayElement.innerHTML = parseInt(displayElement.innerHTML) - 1;
+            let displayStockElement = document.getElementById('displayStock');
+            displayStockElement.innerHTML = parseInt(displayStockElement.innerHTML) + 1;
+            document.getElementById('quantity').value = $product.quantity;
+            checkButtonStatus();
+        }
+    }
+    function increaseQuantity(){
+        if($product.quantity < $product.stock){
+            $product.quantity++;
+            let displayElement = document.getElementById('displayQuantity');
+            displayElement.innerHTML = parseInt(displayElement.innerHTML) + 1;
+            let displayStockElement = document.getElementById('displayStock');
+            displayStockElement.innerHTML = parseInt(displayStockElement.innerHTML) - 1;
+            document.getElementById('quantity').value = $product.quantity;
+            checkButtonStatus();
+        }
+    }
+    checkButtonStatus();
+    function checkButtonStatus() {
+        var isQuantityZero = parseInt(document.getElementById('quantity').value) === 0;
+
+        document.getElementById('buyNowButton').disabled = isQuantityZero;
+        document.getElementById('addCartButton').disabled = isQuantityZero;
     }
 </script>
 {{-- Footer Section --}}
 <section id="footer">
-    {{-- @include('components.footer') --}}
+    @include('components.footer')
 </section>
 {{-- End of Footer Section --}}
 </body>

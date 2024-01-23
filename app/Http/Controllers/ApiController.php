@@ -21,6 +21,7 @@ class ApiController extends Controller
             ->where("category",$category)
             ->where("status","Active")
             ->first();
+        $data['product']->quantity = 0;
         $data['related_product'] = Product::select("*")
             ->where("status","Active")
             ->inRandomOrder()
@@ -45,7 +46,13 @@ class ApiController extends Controller
             $cart->product_name = $product->product_name;
             $cart->quantity = $quantity;
         } else {
-            $cart->quantity = ($cart->quantity + $quantity);
+            $postQuantity = $cart->quantity + $quantity;
+            if ($postQuantity > $product->stock) {
+                //If the quantity that inserted more than available stock, the quantity will be set to stock
+                $cart->quantity = $product->stock;
+            } else {
+                $cart->quantity = $postQuantity;
+            }
         }
 
         if($cart->save()){
@@ -56,15 +63,39 @@ class ApiController extends Controller
 
     }
 
+    public function deleteCart($productName){
+        $product = Product::select("*")->where("product_name",$productName)->where("status","Active")->first();
+
+        if(!$product){
+            return json_encode(["status"=>0,"message"=>"Product Not Found"]);
+        }
+
+        $cart = Cart::where("product_name", $product->product_name)->first();
+
+        if(!$cart){
+            return json_encode(["status"=>0,"message"=>"Product in Cart Not Found"]);
+        }
+
+        if($cart->delete()){
+            return redirect('/cart');
+        } else {
+            return json_encode(["status"=>0,"message"=>"failed to delete product in cart"]);
+        }
+    }
+
     public function showCart(){
-        $data['cart'] = Cart::select("*")->get();
+        $data['cart'] = Cart::select('cart.*', 'product.*')
+        ->join('product', 'cart.product_name', '=', 'product.product_name')
+        ->get();
 
         return view('cart',$data);
     }
 
     public function searchProduct(Request $request){
-        $searchBarValue = $request->input('searchbar');
+        $searchBarValue = $request->input('search');
+        $arrayStr = explode(" ",$searchBarValue);
+        // return json_encode(["message"=>$arrayStr]);
 
-        \Log::info("Search Value: " . $searchBarValue);
+        \Log::info("Search Value: " . $arrayStr);
     }
 }
