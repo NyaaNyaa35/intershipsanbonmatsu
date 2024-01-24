@@ -8,7 +8,7 @@
         </div>
         {{-- Feature Link Navigation --}}
         <div class="col-12 col-md-10 col-lg-10 feature-container">
-            <a href="{{ url('#') }}" class="icon-link-transaction p-t-16">
+            <a href="{{ url('https://www.nikko-monkeys.beer/') }}" class="icon-link-transaction p-t-16">
                 About us
             </a>
             <a href="{{ url('/') }}" class="icon-link-transaction p-t-16">
@@ -24,10 +24,13 @@
                 <i class="fa-solid fa-user"></i>
                 Sign in
             </a>
-            <a href="{{ url('/cart') }}" class="icon-link-transaction p-t-16">
-                <i class="fa-solid fa-cart-shopping"></i>
-                Cart
-            </a>
+            <div class="cart-container p-t-16 icon-link">
+                <a href="{{ url('/cart') }}" class="">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span class="cart-count">{{ $cartCounter }}</span>
+                    Cart
+                </a>
+            </div>
         </div>
     </div>
 </div>

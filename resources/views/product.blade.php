@@ -16,7 +16,7 @@
         <span class="navigation-text">Nikko Brewing >
             <a href="{{ url("/") }}" class="">Beer</a> >
             <a href="{{ url("Product/search?=". $product->category) }}" class="">{{ $product->category }}</a> >
-            <a href="{{ url("Product/search?=". $product->product_name) }}" class=""><b class="">{{ $product->product_name }}</b></a>
+            <a href="{{ url($product->category."/". $product->product_name) }}" class=""><b class="">{{ $product->product_name }}</b></a>
         </span>
         <div class="row product-container m-t-20">
             {{-- Main Product Pic --}}
@@ -56,7 +56,7 @@
                     </p>
                     <p class="m-t-1 m-b-1 flex-m">
                         <b class="fs-30">
-                            ¥{{ $product->price }}
+                            ¥{{ number_format($product->price) }}
                         </b>
                         <span class="m-l-5 fs-16">
                             (税込)/{{ $product->size }}ml
@@ -109,7 +109,7 @@
             </div>
             <div class="row">
                 @for ($i = 0 ; $i < count($related_product) ; $i++)
-                <a href="{{ url($related_product[$i]->category, $related_product[$i]->product_name) }}" class="col-md-3">
+                <a href="{{ url("Beer/".$related_product[$i]->category."/". $related_product[$i]->product_name) }}" class="col-md-3">
                     <div class="product-spacer" id="image{{$related_product[$i]->id}}">
                         <div class="product-box">
                             <div class="product-image-container">
@@ -118,7 +118,7 @@
                             <div class="product-info-container">
                                 <div class="product-name"><b>{{ $related_product[$i]->category }}</b><br><b>{{ $related_product[$i]->product_name }}</b></div>
                                 <div class="product-price-container">
-                                    <div class="product-price"> ¥{{ $related_product[$i]->price }} </div>
+                                    <div class="product-price"> ¥{{ number_format($related_product[$i]->price) }} </div>
                                     <div class="product-size"> (税込)/{{ $related_product[$i]->size }}ml </div>
                                 </div>
                             </div>
@@ -175,6 +175,9 @@
 
         document.getElementById('buyNowButton').disabled = isQuantityZero;
         document.getElementById('addCartButton').disabled = isQuantityZero;
+    }
+    if (performance.navigation.type == 2) {
+            location.reload(true);
     }
 </script>
 {{-- Footer Section --}}
