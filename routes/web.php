@@ -15,10 +15,6 @@ use App\Http\Controllers\MainController;
 |
 */
 
-Route::get('/', function () {
-    return Redirect::to('/');
-});
-
 // Main Page Section
 Route::get('/', [MainController::class, 'show']);
 Route::get('/Beer/{category}/{name}', [MainController::class, 'showSelectedProduct']);
@@ -31,11 +27,11 @@ Route::post('/cart/add', [MainController::class, 'insertCart']);
 Route::delete('/cart/delete/{productName}', [MainController::class, 'deleteCart']);
 
 // Checkout Section
-Route::get('/cart/checkout', [MainController::class, 'showCheckout']);
-Route::delete('/cart/checkout/delete', [MainController::class, 'deleteCheckout']);
+Route::post('/cart/checkout', [MainController::class, 'showCheckout']);
+Route::post('/cart/checkout/add', [MainController::class, 'insertCheckout']);
+Route::delete('/cart/checkout/delete/{productName}', [MainController::class, 'deleteCheckout']);
+
 Route::get('/success', [MainController::class, 'showSuccess']);
 Route::get('/failed', [MainController::class, 'showFailed']);
-
-Route::post('/cart/checkout/add', [MainController::class, 'insertCheckout']);
 
 

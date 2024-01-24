@@ -23,18 +23,16 @@
             <div class="col-md-4 col-12 main-pic border-yellow">
                 <img src="{{url("images/products/". md5(md5($product->id)) ."/". md5(md5($product->id)) . ".png")}}" alt="" class="">
             </div>
-            <div class="col-md-2 col-12">
+            <div class="col-md-2 col-12 side-pic-container">
                 {{-- Product Side Pic --}}
-                <div class="side-pic-container">
-                    <div class="side-pic border-yellow">
-                        <img src="{{url("images/white-box.png")}}" alt="" class="side-pic-image">
-                    </div>
-                    <div class="side-pic border-yellow">
-                        <img src="{{url("images/white-box.png")}}" alt="" class="side-pic-image">
-                    </div>
-                    <div class="side-pic border-yellow">
-                        <img src="{{url("images/white-box.png")}}" alt="" class="side-pic-image">
-                    </div>
+                <div class="side-pic border-yellow">
+                    <img src="{{url("images/white-box.png")}}" alt="" class="side-pic-image">
+                </div>
+                <div class="side-pic border-yellow">
+                    <img src="{{url("images/white-box.png")}}" alt="" class="side-pic-image">
+                </div>
+                <div class="side-pic border-yellow">
+                    <img src="{{url("images/white-box.png")}}" alt="" class="side-pic-image">
                 </div>
             </div>
             <div class="col-md-6 col-12">

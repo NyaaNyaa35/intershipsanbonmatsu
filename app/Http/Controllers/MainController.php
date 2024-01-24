@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Product as Product;
 use App\Models\Cart as Cart;
+use App\Models\Sales as Sales;
+use App\Models\SalesDetail as SalesDetail;
 
-use App\Http\Controllers\Controller;
+use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
 
 class MainController extends Controller
@@ -115,7 +117,7 @@ class MainController extends Controller
             return json_encode(["status"=>0,"message"=>"Product Not Found"]);
         }
 
-        $cart = Cart::where("product_name", $product->product_name)->first();
+        $cart = Cart::select("*")->where("product_name", $product->product_name)->first();
 
         if(!$cart){
             return json_encode(["status"=>0,"message"=>"Product in Cart Not Found"]);
@@ -128,12 +130,71 @@ class MainController extends Controller
         }
     }
 
-    public function showCheckout(){
-        $data['cart'] = Cart::select('cart.*', 'product.*')
+    public function showCheckout(Request $request){
+        $data['cart'] = json_decode($request->input('selectedProduct'), true);
+        $data['total'] = $request->input('total');
+        $cartTemp = Cart::select('cart.*', 'product.*')
         ->join('product', 'cart.product_name', '=', 'product.product_name')
         ->get();
-        $data['cartCounter'] = $data['cart']->unique('product_name')->count();
-
+        $data['cartCounter'] = $cartTemp->unique('product_name')->count();
         return view('checkout',$data);
+    }
+
+    public function showSuccess(){
+        $cartTemp = Cart::select('cart.*', 'product.*')
+        ->join('product', 'cart.product_name', '=', 'product.product_name')
+        ->get();
+        $data['cartCounter'] = $cartTemp->unique('product_name')->count();
+        return view("/message/success",$data);
+    }
+    public function showFailed(){
+        $cartTemp = Cart::select('cart.*', 'product.*')
+        ->join('product', 'cart.product_name', '=', 'product.product_name')
+        ->get();
+        $data['cartCounter'] = $cartTemp->unique('product_name')->count();
+        return view("/message/failed",$data);
+    }
+
+    public function insertCheckout(Request $request){
+        $cartTemp = Cart::select('cart.*', 'product.*')
+        ->join('product', 'cart.product_name', '=', 'product.product_name')
+        ->get();
+        $data['cartCounter'] = $cartTemp->unique('product_name')->count();
+
+        $inputData = json_decode($request->input('productCheckout'), true);
+
+        if(!$inputData){
+            return json_encode(["status"=>0,"message"=>"No data inserted"]);
+        }
+        $products = $inputData['products'];
+        $totalPrice = $inputData['total'];
+        $shippingCost = $inputData['shippingCost'];
+
+        $sales = new Sales;
+        $sales->sales_date = now();
+        $sales->total_cost = $totalPrice;
+        $sales->shipping_cost = $shippingCost;
+        $sales->pending = 1; // Still on progress
+
+        if($sales->save()){
+            $salesDetail = new SalesDetail;
+
+            foreach ($products as $item){
+                $salesDetail->sales_id = $sales->id;
+                $salesDetail->product_name = $item['product_name'];
+                $salesDetail->quantity = $item['quantity'];
+                $salesDetail->itemPrice = $item['price'];
+                $salesDetail->totalPrice = $item['price'] * $item['quantity'];
+                $salesDetail->save();
+
+                $cart = Cart::firstWhere('product_name',$item['product_name']);
+                $cart->delete();
+            }
+
+            return view("/message/success",$data);
+        } else {
+            return view("/message/failed",$data);
+        }
+
     }
 }
