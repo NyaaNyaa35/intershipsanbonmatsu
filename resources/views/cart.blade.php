@@ -77,9 +77,9 @@
                 <div class="col-md-4 p-all-30">
                     <h1>Total</h1>
                     <hr>
-                    <form action="{{ url('') }}" method="post">
+                    <form action="{{ url('/cart/checkout') }}" method="POST" onsubmit="prepareCheckoutData()">
                         @csrf
-                        <input type="hidden" name="product" value="{{ $cart }}">
+                        <input type="hidden" name="selectedProduct" value="">
                         <input id="total" type="hidden" name="total" value="0" min="0">
                         <div class="row font-bold">
                             <div class="col-md-6">
@@ -104,7 +104,7 @@
                             </button>
                         </div>
                         <div class="flex-c-m m-t-10">
-                            <a href="{{ url("/cart/checkout") }}" class=""><i class="fa-solid fa-arrow-left m-r-10 fs-12" style="align-items:center"></i><span style="text-decoration: underline;">Continue Shopping</span></a>
+                            <a href="{{ url("/") }}" class=""><i class="fa-solid fa-arrow-left m-r-10 fs-12" style="align-items:center"></i><span style="text-decoration: underline;">Continue Shopping</span></a>
                         </div>
                     </form>
                 </div>
@@ -116,6 +116,7 @@
 {{-- End of Main Page Section --}}
 <script>
     var $cart = @json($cart);
+    var selectedProducts = [];
 
     function decreaseCartQuantity(index) {
         if($cart[index].quantity > 1){
@@ -123,6 +124,7 @@
             let displayElement = document.getElementById('displayCartQuantity' + index);
             displayElement.innerHTML = parseInt(displayElement.innerHTML) - 1;
             console.log($cart[index].quantity)
+            updateSelectedProductQuantity(index)
             updateTotal();
         }
     }
@@ -133,21 +135,29 @@
             console.log($cart[index].quantity)
             let displayElement = document.getElementById('displayCartQuantity' + index);
             displayElement.innerHTML = parseInt(displayElement.innerHTML) + 1;
+            updateSelectedProductQuantity(index)
             updateTotal();
         }
     }
+    function updateSelectedProductQuantity(index) {
+        var selectedProductIndex = selectedProducts.findIndex(item => item.id === $cart[index].id);
+
+        if (selectedProductIndex !== -1) {
+            selectedProducts[selectedProductIndex].quantity = $cart[index].quantity;
+            updateHiddenInput();
+        }
+    }
+
     function number_format(value) {
         return new Intl.NumberFormat('ja-JP', { style: 'currency', currency: 'JPY' }).format(value);
     }
     function updateTotal() {
         var total = 0;
 
-        var checkedCheckboxes = document.querySelectorAll('input[name="options[]"]:checked');
-
-        checkedCheckboxes.forEach(function (checkbox) {
-            var index = checkbox.value.replace('option-', '');
-
-            total += $cart[index].price * $cart[index].quantity;
+        selectedProducts.forEach(function (product) {
+            if (product && product.price && product.quantity) {
+                total += product.price * product.quantity;
+            }
         });
 
         document.getElementById('totalPrice').innerText = number_format(total);
@@ -156,12 +166,24 @@
     document.addEventListener('DOMContentLoaded', function () {
         var checkboxes = document.querySelectorAll('input[name="options[]"]');
         checkboxes.forEach(function (checkbox) {
-            checkbox.addEventListener('change', function() {
+            checkbox.addEventListener('change', function () {
+                var index = parseInt(checkbox.value.replace('option-', ''));
+                if (checkbox.checked) {
+                    selectedProducts.push($cart[index]);
+                } else {
+                    selectedProducts = selectedProducts.filter(item => item !== $cart[index]);
+                }
                 updateTotal();
                 checkButtonStatus();
+                updateHiddenInput();
             });
         });
     });
+
+    function updateHiddenInput() {
+        document.getElementsByName('selectedProduct')[0].value = JSON.stringify(selectedProducts);
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
         var goToTopBtn = document.getElementById('goToTopBtn');
 
@@ -195,6 +217,23 @@
 
     if (performance.navigation.type == 2) {
             location.reload(true);
+    }
+
+    function prepareCheckoutData() {
+
+        document.getElementById('total').value = calculateTotal();
+
+        return true;
+    }
+
+    function calculateTotal() {
+        var total = 0;
+
+        for (var i = 0; i < $cart.length; i++) {
+            total += $cart[i].price * $cart[i].quantity;
+        }
+
+        return total;
     }
 
 </script>
