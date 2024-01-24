@@ -14,7 +14,7 @@
     <div class="container m-t-20 m-b-40">
         @if ($cart->isEmpty())
             <div class="empty-message">
-                <div class="fs-40 font-bold text-center">Your cart is empty<br>try adding items to your cart</div>
+                <div class="fs-40 font-bold text-center">Error There's No Item in Your Cart</div>
                 <div class="flex-c-m m-t-10">
                     <a href="{{ url("/") }}" class=""><i class="fa-solid fa-arrow-left m-r-10 fs-12" style="align-items:center"></i><span style="text-decoration: underline;">Continue Shopping</span></a>
                 </div>
@@ -22,18 +22,17 @@
         @else
             <div class="row">
                 <div class="col-md-8 bgwhite2 p-all-25">
-                    <h1>Shopping Cart</h1>
+                    <h1>Checkout</h1>
                     @for ($i = 0 ; $i < count($cart) ; $i++)
                         <hr class="m-t-20">
                         <div class="flex-row">
                             <div class="flex-row m-l-10" style="align-items:center;">
-                                <input type="checkbox" id="option-{{ $i }}" name="options[]" value="option-{{ $i }}">
                                 <div class="m-l-25 white-box">
                                     <img
                                         src="{{ url("images/products/". md5(md5($cart[$i]->id)) ."/". md5(md5($cart[$i]->id)) . ".png") }}" alt="" class="">
                                 </div>
                             </div>
-                            <div class="flex-col m-l-25">
+                            <div class="flex-col m-l-25 w-full">
                                 <div class="top-section font-bold">
                                     {{ $cart[$i]->category }} <br>
                                     {{ $cart[$i]->product_name }}
@@ -45,16 +44,8 @@
                                     <div class="p-t-3 fs-12 m-r-15 text-gray">
                                         Quantity
                                     </div>
-                                    <div class="quantity-container bg-white p-all-3 p-r-3">
-                                        <button onclick="decreaseCartQuantity({{ $i }})" class="fs-10 m-r-20 box-cream bgwhite2 box-shadow-2">
-                                            -
-                                        </button>
-                                        <span id="displayCartQuantity{{ $i }}" data-cart-quantity="{{ $cart[$i]->quantity }}" class="fs-12">
-                                            {{ $cart[$i]->quantity }}
-                                        </span>
-                                        <button onclick="increaseCartQuantity({{ $i }})" class="fs-10 m-l-20 m-r-3 box-cream bgwhite2 box-shadow-1">
-                                            +
-                                        </button>
+                                    <div class="p-t-3 fs-12 m-r-15 text-gray">
+                                        x1
                                     </div>
                                 </div>
                             </div>
@@ -64,7 +55,7 @@
                                     (税込)
                                 </div>
                                 <div class="flex-col trash-can" style="justify-content : flex-end;" onclick="deleteCart({{ $cart[$i]->id }})">
-                                    <form id="deleteCartForm{{ $cart[$i]->id }}" action="{{ url('/cart/delete/' . $cart[$i]->product_name ) }}" method="POST">
+                                    <form id="deleteCartForm{{ $cart[$i]->id }}" action="{{ url('/cart/checkout/delete/' . $cart[$i]->product_name ) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
                                         <img src="{{ url('images/trash-can.png') }}" alt="" class="">
@@ -83,18 +74,35 @@
                         <input id="total" type="hidden" name="total" value="0" min="0">
                         <div class="row font-bold">
                             <div class="col-md-6">
+                                Subtotal
+                            </div>
+                            <div id="totalPrice" class="col-md-6">
+                                ¥ {{ number_format(0) }}
+                            </div>
+                        </div>
+                        <div class="row font-bold">
+                            <div class="col-md-6">
+                                Shipping
+                            </div>
+                            <div id="totalPrice" class="col-md-6">
+                                ¥ {{ number_format(0) }}
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row m-t-15 font-bold">
+                            <div class="col-md-6">
                                 Total
                             </div>
                             <div id="totalPrice" class="col-md-6">
                                 ¥ {{ number_format(0) }}
                             </div>
                         </div>
-                        <div class="row m-t-15">
+                        <div class="row">
                             <div class="col-md-6">
                                 Discount Code
                             </div>
                             <div class="col-md-6 flex-row flex-m">
-                                <i class="fa-solid fa-arrow-right"></i><input class="input-no-border" type="search" id="discount-code" placeholder='' name="discount" maxlength="10" value="" style="text-transform:uppercase">
+                                <i class="fa-solid fa-arrow-right"></i><input class="input-no-border" type="search" id="discount-code" placeholder='' name="discount_code" maxlength="10" value="" style="text-transform:uppercase">
                             </div>
                         </div>
                         <hr style="height:2px;">
@@ -104,7 +112,7 @@
                             </button>
                         </div>
                         <div class="flex-c-m m-t-10">
-                            <a href="{{ url("/cart/checkout") }}" class=""><i class="fa-solid fa-arrow-left m-r-10 fs-12" style="align-items:center"></i><span style="text-decoration: underline;">Continue Shopping</span></a>
+                            <a href="{{ url("/") }}" class=""><i class="fa-solid fa-arrow-left m-r-10 fs-12" style="align-items:center"></i><span style="text-decoration: underline;">Continue Shopping</span></a>
                         </div>
                     </form>
                 </div>

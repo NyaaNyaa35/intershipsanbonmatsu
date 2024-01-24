@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\ApiController;
+use App\Http\Controllers\MainController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,13 +20,22 @@ Route::get('/', function () {
 });
 
 // Main Page Section
-Route::get('/', [ApiController::class, 'show']);
-Route::get('/{category}/{name}', [ApiController::class, 'showSelectedProduct']);
+Route::get('/', [MainController::class, 'show']);
+Route::get('/Beer/{category}/{name}', [MainController::class, 'showSelectedProduct']);
+
+Route::get('/Product', [MainController::class, 'searchProduct']);
 
 // Cart Section
-Route::get('/cart', [ApiController::class, 'showCart']);
-Route::post('/cart/add', [ApiController::class, 'insertCart']);
-Route::delete('/cart/delete/{productName}', [ApiController::class, 'deleteCart']);
+Route::get('/cart', [MainController::class, 'showCart']);
+Route::post('/cart/add', [MainController::class, 'insertCart']);
+Route::delete('/cart/delete/{productName}', [MainController::class, 'deleteCart']);
 
-Route::get('/Product', [ApiController::class, 'searchProduct']);
+// Checkout Section
+Route::get('/cart/checkout', [MainController::class, 'showCheckout']);
+Route::delete('/cart/checkout/delete', [MainController::class, 'deleteCheckout']);
+Route::get('/success', [MainController::class, 'showSuccess']);
+Route::get('/failed', [MainController::class, 'showFailed']);
+
+Route::post('/cart/checkout/add', [MainController::class, 'insertCheckout']);
+
 

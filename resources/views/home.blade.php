@@ -17,7 +17,7 @@
         <div class="product-container">
             <div class="row">
                 @for ($i = 0 ; $i < count($product) ; $i++)
-                    <a href="{{ url($product[$i]->category, $product[$i]->product_name) }}" class="col-md-3">
+                    <a href="{{ url("Beer/". $product[$i]->category."/". $product[$i]->product_name) }}" class="col-md-3">
                         <div class="product-spacer" id="image{{$product[$i]->id}}">
                             <div class="product-box">
                                 <div class="product-image-container">
@@ -30,7 +30,7 @@
                                         <b>{{ $product[$i]->product_name }}</b>
                                     </div>
                                     <div class="product-price-container">
-                                        <div class="product-price"> ¥{{ $product[$i]->price }} </div>
+                                        <div class="product-price"> ¥{{ number_format($product[$i]->price) }} </div>
                                         <div class="product-size"> (税込)/{{ $product[$i]->size }}ml </div>
                                     </div>
                                 </div>
@@ -81,6 +81,9 @@
         if (event.target == modal) {
             closeModal();
         }
+    }
+    if (performance.navigation.type == 2) {
+            location.reload(true);
     }
 </script>
 {{-- Footer Section --}}
