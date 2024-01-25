@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product as Product;
 use App\Models\Cart as Cart;
+use App\Models\Category as Category;
+use App\Models\Product as Product;
 use App\Models\Sales as Sales;
 use App\Models\SalesDetail as SalesDetail;
 
@@ -16,6 +17,7 @@ class MainController extends Controller
         $data['product'] = Product::select("*")->where("status","Active")->get();
         $data['cart'] = Cart::select("*")->get();
         $data['cartCounter'] = $data['cart']->unique('product_name')->count();
+        $data['category'] = Category::select("*")->get();
         return view('home',$data);
     }
 
@@ -51,13 +53,6 @@ class MainController extends Controller
 
         return view('cart',$data);
     }
-    public function searchProduct(Request $request){
-        $searchBarValue = $request->input('search');
-        $arrayStr = explode(" ",$searchBarValue);
-        // return json_encode(["message"=>$arrayStr]);
-
-        \Log::info("Search Value: " . $arrayStr);
-    }
 
     public function insertCart(Request $request){
         $quantity = $request->input('quantity');
@@ -70,6 +65,8 @@ class MainController extends Controller
 
         $cart = Cart::where("product_name", $product->product_name)->first();
 
+        $stateFull = 0;
+
         if(!$cart){
             $cart = new Cart();
             $cart->product_name = $product->product_name;
@@ -78,13 +75,16 @@ class MainController extends Controller
             $postQuantity = $cart->quantity + $quantity;
             if ($postQuantity > $product->stock) {
                 $cart->quantity = $product->stock;
+                $stateFull = 1;
             } else {
                 $cart->quantity = $postQuantity;
             }
         }
 
-        if($cart->save()){
-            return redirect('/cart');
+        if($cart->save() && $stateFull){
+            return json_encode(["status"=>1,"message"=>"This item have reached stock limit at your cart!"]);
+        } else if($cart->save() && !$stateFull){
+            return json_encode(["status"=>1,"message"=>"Item(s) added to cart"]);
         } else {
             return json_encode(["status"=>0,"message"=>"failed to add product to cart"]);
         }
@@ -95,38 +95,44 @@ class MainController extends Controller
         $product = Product::select("*")->where("product_name",$productName)->where("status","Active")->first();
 
         if(!$product){
-            return json_encode(["status"=>0,"message"=>"Product Not Found"]);
+            $data['message'] = "Product Not Found";
+            return view("message/failed",$data);
         }
 
         $cart = Cart::where("product_name", $product->product_name)->first();
 
         if(!$cart){
-            return json_encode(["status"=>0,"message"=>"Product in Cart Not Found"]);
+            $data['message'] = "Product in Cart Not Found";
+            return view("message/failed",$data);
         }
 
         if($cart->delete()){
             return redirect('/cart');
         } else {
-            return json_encode(["status"=>0,"message"=>"failed to delete product in cart"]);
+            $data['message'] = "failed to delete product in cart";
+            return view("message/failed",$data);
         }
     }
     public function deleteCheckout($productName){
         $product = Product::select("*")->where("product_name",$productName)->where("status","Active")->first();
 
         if(!$product){
-            return json_encode(["status"=>0,"message"=>"Product Not Found"]);
+            $data['message'] = "Product Not Found";
+            return view("message/failed",$data);
         }
 
         $cart = Cart::select("*")->where("product_name", $product->product_name)->first();
 
         if(!$cart){
-            return json_encode(["status"=>0,"message"=>"Product in Cart Not Found"]);
+            $data['message'] = "Product in Cart Not Found";
+            return view("message/failed",$data);
         }
 
         if($cart->delete()){
             return redirect('/cart/checkout');
         } else {
-            return json_encode(["status"=>0,"message"=>"failed to delete product in cart"]);
+            $data['message'] = "failed to delete product in cart";
+            return view("message/failed",$data);
         }
     }
 
@@ -147,13 +153,6 @@ class MainController extends Controller
         $data['cartCounter'] = $cartTemp->unique('product_name')->count();
         return view("/message/success",$data);
     }
-    public function showFailed(){
-        $cartTemp = Cart::select('cart.*', 'product.*')
-        ->join('product', 'cart.product_name', '=', 'product.product_name')
-        ->get();
-        $data['cartCounter'] = $cartTemp->unique('product_name')->count();
-        return view("/message/failed",$data);
-    }
 
     public function insertCheckout(Request $request){
         $cartTemp = Cart::select('cart.*', 'product.*')
@@ -164,7 +163,8 @@ class MainController extends Controller
         $inputData = json_decode($request->input('productCheckout'), true);
 
         if(!$inputData){
-            return json_encode(["status"=>0,"message"=>"No data inserted"]);
+            $data['message'] = "No data inserted";
+            return view("message/failed",$data);
         }
         $products = $inputData['products'];
         $totalPrice = $inputData['total'];
@@ -193,8 +193,39 @@ class MainController extends Controller
 
             return view("/message/success",$data);
         } else {
+            $data['message'] = "No data inserted";
             return view("/message/failed",$data);
         }
 
+    }
+    public function searchProduct(Request $request){
+        $categoryName = $request->input('category_name');
+        $minStock = $request->input('input-stock');
+        $keyword = $request->input('keyword');
+
+        $products = Product::query();
+
+        if ($categoryName) {
+            $products->where('category', $categoryName);
+        }
+
+        if ($minStock) {
+            $products->where('stock', '>=', $minStock);
+        }
+
+        if ($keyword) {
+            $products->where(function ($query) use ($keyword) {
+                $query->whereRaw('LOWER(product_name) like ?', ["%".strtolower($keyword)."%"])
+                      ->orWhereRaw('LOWER(description) like ?', ["%".strtolower($keyword)."%"])
+                      ->orWhereRaw('LOWER(category) like ?', ["%".strtolower($keyword)."%"]);
+            });
+        }
+
+        $data['product'] = $products->get();
+        $data['cart'] = Cart::select("*")->get();
+        $data['cartCounter'] = $data['cart']->unique('product_name')->count();
+        $data['category'] = Category::select("*")->get();
+
+        return view('home', $data);
     }
 }

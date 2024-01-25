@@ -23,8 +23,9 @@
             {{-- Search Bar Section --}}
             <div class="search-section p-t-12">
                 <form id="searchForm" action="{{ url('/Product') }}" class="form-searchbar" method="get" autocomplete="off" accept-charset="UTF-8">
+                    @csrf
                     <span class="search-icon" onclick="openModal()"><i class="fa-solid fa-magnifying-glass"></i></span>
-                    <input class="searchbar-navbar input-no-border" type="search" id="search-input" placeholder='Search' name="search" value="">
+                    <input class="searchbar-navbar input-no-border" type="search" id="search-input" placeholder='Search' name="keyword" value="">
                     <button type="submit" style="display: none;"></button>
                 </form>
             </div>

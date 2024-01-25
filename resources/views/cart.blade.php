@@ -215,10 +215,6 @@
         checkoutButton.disabled = isNoCheckboxChecked;
     }
 
-    if (performance.navigation.type == 2) {
-            location.reload(true);
-    }
-
     function prepareCheckoutData() {
 
         document.getElementById('total').value = calculateTotal();
@@ -235,6 +231,10 @@
 
         return total;
     }
+
+    var blurred = false;
+    window.onblur = function() { blurred = true; };
+    window.onfocus = function() { blurred && (location.reload()); };
 
 </script>
 {{-- Footer Section --}}
