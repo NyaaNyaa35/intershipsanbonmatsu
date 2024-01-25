@@ -13,10 +13,11 @@
 {{-- Main Page Section --}}
 <section id="main-section">
     <div class="container m-t-20">
+        <div id="toast"></div>
         <span class="navigation-text">Nikko Brewing >
             <a href="{{ url("/") }}" class="">Beer</a> >
-            <a href="{{ url("Product/search?=". $product->category) }}" class="">{{ $product->category }}</a> >
-            <a href="{{ url($product->category."/". $product->product_name) }}" class=""><b class="">{{ $product->product_name }}</b></a>
+            {{ $product->category }} >
+            <a href="{{ url("Beer/". $product->category."/". $product->product_name) }}" class=""><b class="">{{ $product->product_name }}</b></a>
         </span>
         <div class="row product-container m-t-20">
             {{-- Main Product Pic --}}
@@ -93,7 +94,8 @@
                             Buy Now
                         </button>
                         <button id="addCartButton"
-                            class="green-button fs-13 m-r-20">
+                            class="green-button fs-13 m-r-20"
+                            onclick="addToCart('{{ $product->product_name }}', event)">
                             Add to Cart
                         </button>
                     </form>
@@ -130,17 +132,11 @@
 </section>
 {{-- End of Main Page Section --}}
 <script>
-    document.getElementById('buyNowButton').addEventListener('click', function() {
-        openBuyNowModal();
-    });
     function openBuyNowModal() {
         document.getElementById('buyNowModal').style.display = 'block';
     }
     function closeBuyNowModal(){
         document.getElementById('buyNowModal').style.display = 'none';
-    }
-    function submitBuyNowForm() {
-        document.getElementById('buyNowForm').submit();
     }
 
     var $product = @json($product);
@@ -174,8 +170,92 @@
         document.getElementById('buyNowButton').disabled = isQuantityZero;
         document.getElementById('addCartButton').disabled = isQuantityZero;
     }
-    if (performance.navigation.type == 2) {
-            location.reload(true);
+
+    var blurred = false;
+    window.onblur = function() { blurred = true; };
+    window.onfocus = function() { blurred && (location.reload()); };
+
+    function toast(content){
+        $("#toast").append('<div class="alert alert-success" style="border-radius:1em;background:rgba(0,0,0,0.5)">'+content+'</div>');
+        setTimeout(function(){
+            $("#toast div").fadeOut();
+        },3000);
+    }
+
+    function loadingShow(){
+        $("body").append("<div id='loading-div' style='position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);color:white;z-index:10000' align='center'><br><br><br><h1>Processing...</h1></div>");
+    }
+
+    function loadingHide(){
+        $("#loading-div").remove();
+    }
+
+    function submitBuyNowForm() {
+        document.getElementById('buyNowModal').style.display = 'none';
+        loadingShow();
+
+        var quantityElement = document.getElementById('displayQuantity');
+        var quantity = quantityElement ? parseInt(quantityElement.innerText) : 1;
+        var data = {
+            productName: '{{ $product->product_name }}',
+            quantity: quantity
+        };
+
+        fetch('{{ url("/cart/add") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+            loadingHide();
+            if (data.status === 1) {
+                toast(data.message);
+                // Redirect to the /cart page after successful addition
+                window.location.href = '{{ url("/cart") }}';
+            }
+        })
+        .catch(error => {
+            loadingHide();
+            console.error('Error:', error);
+            toast("Failed to add product to cart");
+        });
+    }
+
+    function addToCart(productName, event) {
+        event.preventDefault();
+        loadingShow()
+
+        var quantityElement = document.getElementById('displayQuantity');
+        var quantity = quantityElement ? parseInt(quantityElement.innerText) : 1;
+        var data = {
+            productName: productName,
+            quantity: quantity
+        };
+
+        fetch('{{ url("/cart/add") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+            loadingHide();
+            if (data.status === 1) {
+                toast(data.message);
+            }
+        })
+        .catch(error => {
+            loadingHide();
+            console.error('Error:', error);
+            toast("Failed to add product to cart");
+        });
     }
 </script>
 {{-- Footer Section --}}

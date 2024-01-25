@@ -12,6 +12,14 @@
 
 {{-- Main Page Section --}}
 <section id="main-section">
+    @if(count($product) == 0)
+        <div class="empty-message m-t-100 m-b-100">
+            <div class="fs-40 font-bold text-center">Oops, No item(s) found</div>
+            <div class="flex-c-m m-t-10">
+                <a href="{{ url("/") }}" class=""><i class="fa-solid fa-arrow-left m-r-10 fs-12" style="align-items:center"></i><span style="text-decoration: underline;">Continue Shopping</span></a>
+            </div>
+        </div>
+    @else
     <div class="container m-t-20">
         <span class="navigation-text">Nikko Brewing > <a href="{{ url("/") }}" class=""><b class="">Beer</b></a></span>
         <div class="product-container">
@@ -41,6 +49,7 @@
             </div>
         </div>
     </div>
+    @endif
     <button id="goToTopBtn" class="bgwhite2" onclick="goToTop()"><i class="fa-solid fa-chevron-up"></i></button>
 </section>
 {{-- End of Main Page Section --}}
@@ -82,9 +91,10 @@
             closeModal();
         }
     }
-    if (performance.navigation.type == 2) {
-            location.reload(true);
-    }
+
+    var blurred = false;
+    window.onblur = function() { blurred = true; };
+    window.onfocus = function() { blurred && (location.reload()); };
 </script>
 {{-- Footer Section --}}
 <section id="footer">

@@ -15,6 +15,10 @@ use App\Http\Controllers\MainController;
 |
 */
 
+// Route::get('/Product', function () {
+//     return Redirect::to('/');
+// });
+
 // Main Page Section
 Route::get('/', [MainController::class, 'show']);
 Route::get('/Beer/{category}/{name}', [MainController::class, 'showSelectedProduct']);

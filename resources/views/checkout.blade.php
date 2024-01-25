@@ -182,7 +182,6 @@
             shippingCost: shippingCost,
             discount_code: discount_code,
         };
-        console.log(paymentData)
 
         document.getElementById('productCheckout').value = JSON.stringify(paymentData);
 
@@ -190,6 +189,24 @@
         checkoutForm.submit();
     }
 
+    var blurred = false;
+    window.onblur = function() { blurred = true; };
+    window.onfocus = function() { blurred && (location.reload()); };
+
+    function toast(content){
+        $("#toast").append('<div class="alert alert-success" style="border-radius:1em;background:rgba(0,0,0,0.5)">'+content+'</div>');
+        setTimeout(function(){
+            $("#toast div").fadeOut();
+        },3000);
+    }
+
+    function loadingShow(){
+        $("body").append("<div id='loading-div' style='position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);color:white;z-index:10000' align='center'><br><br><br><h1>Processing...</h1></div>");
+    }
+
+    function loadingHide(){
+        $("#loading-div").remove();
+    }
 
 </script>
 {{-- Footer Section --}}

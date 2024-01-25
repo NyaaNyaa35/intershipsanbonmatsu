@@ -3,9 +3,13 @@ a {
     text-decoration: none !important;
 }
 
+.border-bottom {
+    border-bottom: 2px solid black;
+    min-width : 200px;
+}
 
 .input-no-border{
-    border-width: 0px !important;
+    border-width: 0px;
 }
 .input-no-border:focus {
     outline: none;
@@ -16,7 +20,7 @@ a {
     border-color: #fff;
 }
 
-/* Backdrop Modal Section */
+/* Modal Section */
 .modal {
     display: none;
     position: fixed;
@@ -32,7 +36,7 @@ a {
 .modal-content {
     position: relative;
     background-color: #fefefe;
-    margin: 15% auto;
+    margin: 10% auto;
     padding: 20px;
     border: 1px solid #888;
     width: 100%;
@@ -48,6 +52,74 @@ a {
     flex-direction: row;
     align-items: center;
     justify-content: center;
+}
+
+.button-search-container{
+    display : flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.button-search {
+    min-width : 200px;
+    border : 1px solid white;
+    border-radius: 8px;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
+    transition: ease-in-out 0.3s;
+}
+.button-featured-container{
+    display: flex;
+    justify-content: flex-end;
+}
+.button-featured {
+    background-color: green;
+    color : white;
+    min-width : 200px;
+    border : 1px solid white;
+    border-radius: 8px;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
+    transition: ease-in-out 0.3s;
+}
+.button-search:hover{
+    cursor: pointer;
+}
+.button-featured:hover{
+    cursor : pointer;
+}
+.button-search:active{
+    transform: scale(0.95);
+}
+.button-featured:active{
+    transform: scale(0.85);
+}
+
+#toast {
+    position: fixed;
+    top: 40px;
+    right: 40px;
+    z-index: 1000;
+    max-width: 300px;
+}
+
+.alert {
+    padding: 8px 35px 8px 14px;
+    margin-bottom: 20px;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+    background-color: #D7A933;
+    border: 1px solid #fbeed5;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+.alert-success {
+    color: white;
+    background-color: #D7A933;
+    border-color: #d6e9c6;
+}
+
+.alert-success h4 {
+    color: white;
 }
 
 /* End Of Modal Section */
@@ -201,6 +273,11 @@ a {
     transform: scale(0.9) !important;
     cursor: pointer;
 }
+
+.category-selection{
+    border : none !important;
+}
+
 
 /* End Of Header Section */
 
@@ -389,7 +466,7 @@ a {
     border : none;
 }
 .red-button:disabled {
-    background-color: gray;
+    background-color: #990000;;
 }
 .green-button {
     width : 20%;
@@ -404,7 +481,7 @@ a {
     border : none;
 }
 .green-button:disabled {
-    background-color: gray;
+    background-color: #004d00;;
 }
 .green-button:active{
     transform: scale(0.95);
