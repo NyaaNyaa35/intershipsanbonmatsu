@@ -24,6 +24,7 @@ Route::get('/', [MainController::class, 'show']);
 Route::get('/Beer/{category}/{name}', [MainController::class, 'showSelectedProduct']);
 
 Route::get('/Product', [MainController::class, 'searchProduct']);
+Route::get('/Product/Featured', [MainController::class, 'seeFeaturedProduct']);
 
 // Cart Section
 Route::get('/cart', [MainController::class, 'showCart']);

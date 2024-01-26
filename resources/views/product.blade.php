@@ -6,6 +6,7 @@
     {{-- Header Section --}}
 <section class="header">
     @include('components.header')
+    @include('components.modal.searchModal')
     @include('components.modal.buyNowModal')
 </section>
 {{-- End of Header Section --}}
@@ -139,6 +140,28 @@
         document.getElementById('buyNowModal').style.display = 'none';
     }
 
+    $('#search-input').keypress(function(e) {
+        if (e.which === 13) {
+            e.preventDefault();
+            $('#searchForm').submit();
+        }
+    });
+
+    function openModal() {
+        document.getElementById('myModal').style.display = 'block';
+    }
+
+    function closeModal() {
+        document.getElementById('myModal').style.display = 'none';
+    }
+
+    window.onclick = function(event) {
+        var modal = document.getElementById('myModal');
+        if (event.target == modal) {
+            closeModal();
+        }
+    }
+
     var $product = @json($product);
 
     function decreaseQuantity(){
@@ -176,7 +199,7 @@
     window.onfocus = function() { blurred && (location.reload()); };
 
     function toast(content){
-        $("#toast").append('<div class="alert alert-success" style="border-radius:1em;background:rgba(0,0,0,0.5)">'+content+'</div>');
+        $("#toast").append('<div class="alert alert-success" style="border-radius:1em;background:green;color:white;">'+content+'</div>');
         setTimeout(function(){
             $("#toast div").fadeOut();
         },3000);
@@ -214,7 +237,6 @@
             loadingHide();
             if (data.status === 1) {
                 toast(data.message);
-                // Redirect to the /cart page after successful addition
                 window.location.href = '{{ url("/cart") }}';
             }
         })
@@ -227,7 +249,7 @@
 
     function addToCart(productName, event) {
         event.preventDefault();
-        loadingShow()
+        loadingShow();
 
         var quantityElement = document.getElementById('displayQuantity');
         var quantity = quantityElement ? parseInt(quantityElement.innerText) : 1;
@@ -249,6 +271,7 @@
             loadingHide();
             if (data.status === 1) {
                 toast(data.message);
+                location.reload();
             }
         })
         .catch(error => {

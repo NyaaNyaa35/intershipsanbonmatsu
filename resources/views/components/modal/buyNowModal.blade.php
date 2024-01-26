@@ -1,5 +1,5 @@
 <div id="buyNowModal" class="modal">
-    <div class="modal-content">
+    <div class="modal-content w-full">
         <span class="close fs-20 text-right" onclick="closeBuyNowModal()">&times;</span>
         <p class="fs-18 text-center"><b class="">Are you sure about the item details?</b></p>
         <div class="modal-container">

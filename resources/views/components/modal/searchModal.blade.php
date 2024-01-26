@@ -1,5 +1,5 @@
 <div id="myModal" class="modal">
-    <div class="modal-content">
+    <div class="modal-content w-50">
         <span class="close fs-20 text-right" onclick="closeModal()">&times;</span>
         <p><b class="m-l-40 ">Search By</b></p>
         <form id="searchForm" action="{{ url('/Product') }}" class="" method="get" autocomplete="off" accept-charset="UTF-8">
@@ -14,6 +14,7 @@
                     name="category_name"
                     id="category_name"
                     >
+                        <option selected="selected" value="">All</option>
                         @for($i = 0; $i < count($category) ; $i++)
                             <option value="{{ $category[$i]->category_name }}">{{ $category[$i]->category_name }}</option>
                         @endfor
@@ -52,14 +53,21 @@
                         >
                 </div>
             </div>
-            <div class="m-l-25 m-t-20 row button-search-container">
-                <div class="m-b-10 col-6">
+            <div class="m-l-25 m-t-20">
+                <div class="m-b-10">
                     <button class="button-search">Search</button>
                 </div>
-            </form>
-                <div class="m-b-10 col-6 button-featured-container ">
-                    <button class="button-featured m-r-25 ">Featured Products</button>
-                </div>
             </div>
+        </form>
+        <div class="m-l-25">
+            <div class="m-b-10">
+                <button class="button-featured m-r-25" onclick="seeFeaturedProduct()">See Featured Products</button>
+            </div>
+        </div>
     </div>
 </div>
+<script>
+    function seeFeaturedProduct(){
+        window.location.href = '{{ url("/Product/Featured") }}';
+    }
+</script>

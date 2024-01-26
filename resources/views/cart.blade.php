@@ -12,9 +12,10 @@
 {{-- Main Page Section --}}
 <section id="main-section">
     <div class="container m-t-20 m-b-40">
+        <div id="toast"></div>
         @if ($cart->isEmpty())
-            <div class="empty-message">
-                <div class="fs-40 font-bold text-center">Your cart is empty<br>try adding items to your cart</div>
+            <div class="empty-message m-t-70 m-b-100">
+                <div class="fs-40 font-bold text-center m-b-30">Your cart is empty<br>try adding items to your cart</div>
                 <div class="flex-c-m m-t-10">
                     <a href="{{ url("/") }}" class=""><i class="fa-solid fa-arrow-left m-r-10 fs-12" style="align-items:center"></i><span style="text-decoration: underline;">Continue Shopping</span></a>
                 </div>
@@ -63,12 +64,8 @@
                                     <span class="fs-24 font-bold" data-price="{{ $cart[$i]->price }}">¥{{ number_format($cart[$i]->price) }}</span>
                                     (税込)
                                 </div>
-                                <div class="flex-col trash-can" style="justify-content : flex-end;" onclick="deleteCart({{ $cart[$i]->id }})">
-                                    <form id="deleteCartForm{{ $cart[$i]->id }}" action="{{ url('/cart/delete/' . $cart[$i]->product_name ) }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <img src="{{ url('images/trash-can.png') }}" alt="" class="">
-                                    </form>
+                                <div class="flex-col trash-can" style="justify-content : flex-end;" onclick="deleteCartItem('{{ $cart[$i]->product_name }}', event)">
+                                    <img src="{{ url('images/trash-can.png') }}" alt="" class="" onclick="">
                                 </div>
                             </div>
                         </div>
@@ -201,11 +198,6 @@
         document.documentElement.scrollTop = 0;
     }
 
-    function deleteCart(idForm){
-        var selectedForm = document.getElementById('deleteCartForm'+idForm);
-        selectedForm.submit();
-    }
-
     checkButtonStatus();
 
     function checkButtonStatus() {
@@ -232,9 +224,56 @@
         return total;
     }
 
+    function loadingShow(){
+        $("body").append("<div id='loading-div' style='position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);color:white;z-index:10000' align='center'><br><br><br><h1>Processing...</h1></div>");
+    }
+
+    function loadingHide(){
+        $("#loading-div").remove();
+    }
+
+    function deleteCartItem(productName, event) {
+        event.preventDefault();
+        loadingShow();
+
+        const url = '{{ url("/cart/delete/") }}/' + encodeURIComponent(productName);
+
+        fetch(url, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({ productName: productName })
+        })
+        .then(response => response.json())
+        .then(data => {
+            loadingHide();
+            if (data.status === 1) {
+                window.location.href = '{{ url("/cart") }}';
+                toast(data.message);
+            } else {
+                console.error('Error:', data.message);
+            }
+        })
+        .catch(error => {
+            loadingHide();
+            console.error('Error:', error);
+            toast("Failed to delete product to cart");
+        });
+
+    }
+
     var blurred = false;
     window.onblur = function() { blurred = true; };
     window.onfocus = function() { blurred && (location.reload()); };
+
+    function toast(content){
+        $("#toast").append('<div class="alert alert-success" style="border-radius:1em;background:green;color:white;">'+content+'</div>');
+        setTimeout(function(){
+            $("#toast div").fadeOut();
+        },3000);
+    }
 
 </script>
 {{-- Footer Section --}}

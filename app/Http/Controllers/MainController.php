@@ -28,6 +28,7 @@ class MainController extends Controller
             ->where("status","Active")
             ->first();
         $data['cart'] = Cart::select("*")->get();
+        $data['category'] = Category::select("*")->get();
         $data['cartCounter'] = $data['cart']->unique('product_name')->count();
         $data['product']->quantity = 0;
         $data['related_product'] = Product::select("*")
@@ -107,10 +108,9 @@ class MainController extends Controller
         }
 
         if($cart->delete()){
-            return redirect('/cart');
+            return json_encode(["status"=>1,"message"=>"Item(s) deleted from cart"]);
         } else {
-            $data['message'] = "failed to delete product in cart";
-            return view("message/failed",$data);
+            return json_encode(["status"=>1,"message"=>"Failed to delete product in cart"]);
         }
     }
     public function deleteCheckout($productName){
@@ -216,12 +216,28 @@ class MainController extends Controller
         if ($keyword) {
             $products->where(function ($query) use ($keyword) {
                 $query->whereRaw('LOWER(product_name) like ?', ["%".strtolower($keyword)."%"])
-                      ->orWhereRaw('LOWER(description) like ?', ["%".strtolower($keyword)."%"])
-                      ->orWhereRaw('LOWER(category) like ?', ["%".strtolower($keyword)."%"]);
+                    ->orWhereRaw('LOWER(ingredients) like ?', ["%".strtolower($keyword)."%"])
+                    ->orWhereRaw('LOWER(description) like ?', ["%".strtolower($keyword)."%"])
+                    ->orWhereRaw('LOWER(category) like ?', ["%".strtolower($keyword)."%"]);
             });
         }
 
-        $data['product'] = $products->get();
+        $data['product'] = $products->where("status","Active")->get();
+        $data['cart'] = Cart::select("*")->get();
+        $data['cartCounter'] = $data['cart']->unique('product_name')->count();
+        $data['category'] = Category::select("*")->get();
+
+        return view('home', $data);
+    }
+
+    public function seeFeaturedProduct(){
+
+        $data['product'] = Product::select("*")
+            ->where("status","Active")
+            ->where("featured",1)
+            ->orderBy("sold_quantity","ASC")
+            ->orderBy("stock","DESC")
+            ->get();
         $data['cart'] = Cart::select("*")->get();
         $data['cartCounter'] = $data['cart']->unique('product_name')->count();
         $data['category'] = Category::select("*")->get();
