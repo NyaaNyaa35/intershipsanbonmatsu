@@ -67,6 +67,9 @@ See [Configuration Reference](https://laravel-news.com/creating-configuration-in
 - [PHP](https://www.php.net/)
   <br>
   PHP is a general-purpose scripting language geared towards web development.
+- [Blade](https://github.com/blade-lang/blade)
+  <br>
+  Blade is a modern general-purpose programming language focused on enterprise Web, IoT, and secure application development.
 - [JavaScript](https://www.w3schools.com/js/)
   <br>
   JavaScript is a scripting or programming language that allows you to implement complex features on web pages
