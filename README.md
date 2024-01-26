@@ -27,6 +27,36 @@ php artisan key:generate
 php artisan serve
 ```
 
+## Installation and Database Import Steps
+
+### Prerequisites
+- Ensure that you have installed and configured a web server (such as Apache or Nginx).
+- Make sure PHP and MySQL or MariaDB are installed on your system.
+- Ensure you have access to phpMyAdmin.
+
+### Access phpMyAdmin
+Open a web browser and navigate to the phpMyAdmin URL (usually accessible at http://localhost/phpmyadmin).
+
+### Login to phpMyAdmin
+Enter your phpMyAdmin username and password.
+
+### Create a New Database
+- Click on the "Database" tab.
+- Enter the name 'nikko' for the new database.
+- Choose the appropriate collation settings.
+
+### Import the Database
+- Select the newly created database in the left panel.
+- Click on the "Import" tab at the top.
+- Choose the SQL file to be imported.
+- Configure additional settings if necessary (e.g., character set, collation).
+- Click the "Go" button to start the import process.
+
+### Verify Database Import
+- Check the phpMyAdmin interface for any error messages during the import process.
+- Verify that the tables and data from the SQL file are now present in your database.
+- Once the import process is complete, your database is ready for use.
+
 ### Customize configuration
 See [Configuration Reference](https://laravel-news.com/creating-configuration-in-laravel).
 

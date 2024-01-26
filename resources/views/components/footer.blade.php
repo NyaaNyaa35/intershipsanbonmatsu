@@ -15,7 +15,7 @@
             </div>
         </div>
         <div class="col-md-6 col-12" style="text-align: center;">
-            <p>Opened in April 2018 by Sanbonmatsu Chaya, <br>a long-established souvenir shop located in Senjogahara!</p>
+            <p>A craft beer brewery in Senjogahara of Okunikko which opened in April 2018.</p>
             <p>０００－００００－００００</p>
             <p>To reserve your brewing experience, please email</p>
             <p>０００－００００－００００</p>
