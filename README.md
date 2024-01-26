@@ -88,5 +88,3 @@ See [Configuration Reference](https://laravel-news.com/creating-configuration-in
 - [Laravel](https://laravel.com/)
   <br>
   Laravel is a web application framework with expressive, elegant syntax.
-  
-## Database Installation
