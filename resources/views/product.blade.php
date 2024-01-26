@@ -110,25 +110,26 @@
             </div>
             <div class="row">
                 @for ($i = 0 ; $i < count($related_product) ; $i++)
-                <a href="{{ url("Beer/".$related_product[$i]->category."/". $related_product[$i]->product_name) }}" class="col-md-3">
-                    <div class="product-spacer" id="image{{$related_product[$i]->id}}">
-                        <div class="product-box">
-                            <div class="product-image-container">
-                                <img class="product-image" src="{{url("images/products/". md5(md5($related_product[$i]->id)) ."/". md5(md5($related_product[$i]->id)) . ".png")}}">
-                            </div>
-                            <div class="product-info-container">
-                                <div class="product-name"><b>{{ $related_product[$i]->category }}</b><br><b>{{ $related_product[$i]->product_name }}</b></div>
-                                <div class="product-price-container">
-                                    <div class="product-price"> ¥{{ number_format($related_product[$i]->price) }} </div>
-                                    <div class="product-size"> (税込)/{{ $related_product[$i]->size }}ml </div>
+                    <a href="{{ url("Beer/".$related_product[$i]->category."/". $related_product[$i]->product_name) }}" class="col-md-3">
+                        <div class="product-spacer" id="image{{$related_product[$i]->id}}">
+                            <div class="product-box">
+                                <div class="product-image-container">
+                                    <img class="product-image" src="{{url("images/products/". md5(md5($related_product[$i]->id)) ."/". md5(md5($related_product[$i]->id)) . ".png")}}">
+                                </div>
+                                <div class="product-info-container">
+                                    <div class="product-name"><b>{{ $related_product[$i]->category }}</b><br><b>{{ $related_product[$i]->product_name }}</b></div>
+                                    <div class="product-price-container">
+                                        <div class="product-price"> ¥{{ number_format($related_product[$i]->price) }} </div>
+                                        <div class="product-size"> (税込)/{{ $related_product[$i]->size }}ml </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </a>
-            @endfor
+                    </a>
+                @endfor
+            </div>
         </div>
-        </div>
+        <button id="goToTopBtn" class="bgwhite2" onclick="goToTop()"><i class="fa-solid fa-chevron-up"></i></button>
     </div>
 </section>
 {{-- End of Main Page Section --}}
@@ -279,6 +280,23 @@
             console.error('Error:', error);
             toast("Failed to add product to cart");
         });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var goToTopBtn = document.getElementById('goToTopBtn');
+
+        window.onscroll = function() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                goToTopBtn.style.display = 'block';
+            } else {
+                goToTopBtn.style.display = 'none';
+            }
+        };
+    });
+
+    function goToTop() {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
     }
 </script>
 {{-- Footer Section --}}

@@ -129,7 +129,8 @@ class MainController extends Controller
         }
 
         if($cart->delete()){
-            return redirect('/cart/checkout');
+            $url = action([MainController::class, 'showCheckout']);
+            return redirect($url);
         } else {
             $data['message'] = "failed to delete product in cart";
             return view("message/failed",$data);
@@ -137,12 +138,18 @@ class MainController extends Controller
     }
 
     public function showCheckout(Request $request){
-        $data['cart'] = json_decode($request->input('selectedProduct'), true);
+        if (request()->isMethod('post')) {
+            $data['cart'] = json_decode($request->input('selectedProduct'), true);
+        } else {
+            $data['cart'] = [];
+        }
+
         $data['total'] = $request->input('total');
         $cartTemp = Cart::select('cart.*', 'product.*')
         ->join('product', 'cart.product_name', '=', 'product.product_name')
         ->get();
         $data['cartCounter'] = $cartTemp->unique('product_name')->count();
+
         return view('checkout',$data);
     }
 

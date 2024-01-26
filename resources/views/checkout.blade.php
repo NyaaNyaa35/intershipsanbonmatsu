@@ -14,7 +14,7 @@
     <div class="container m-t-20 m-b-40">
         @if (empty($cart))
             <div class="empty-message">
-                <div class="fs-40 font-bold text-center">Error There's No Item to Checkout</div>
+                <div class="fs-40 font-bold text-center">There's No Item to Checkout</div>
                 <div class="flex-c-m m-t-10">
                     <a href="{{ url("/") }}" class=""><i class="fa-solid fa-arrow-left m-r-10 fs-12" style="align-items:center"></i><span style="text-decoration: underline;">Continue Shopping</span></a>
                 </div>
@@ -121,6 +121,7 @@
                 </div>
             </div>
         @endif
+    <button id="goToTopBtn" class="bgwhite2" onclick="goToTop()"><i class="fa-solid fa-chevron-up"></i></button>
     </div>
 </section>
 {{-- End of Main Page Section --}}
@@ -191,7 +192,7 @@
 
     var blurred = false;
     window.onblur = function() { blurred = true; };
-    window.onfocus = function() { blurred && (location.reload()); };
+    window.onfocus = function() { blurred && (location.href = "{{ url('/cart') }}"); };
 
     function toast(content){
         $("#toast").append('<div class="alert alert-success" style="border-radius:1em;background:rgba(0,0,0,0.5)">'+content+'</div>');
@@ -206,6 +207,23 @@
 
     function loadingHide(){
         $("#loading-div").remove();
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var goToTopBtn = document.getElementById('goToTopBtn');
+
+        window.onscroll = function() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                goToTopBtn.style.display = 'block';
+            } else {
+                goToTopBtn.style.display = 'none';
+            }
+        };
+    });
+
+    function goToTop() {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
     }
 
 </script>

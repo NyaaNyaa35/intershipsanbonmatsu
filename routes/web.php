@@ -32,7 +32,7 @@ Route::post('/cart/add', [MainController::class, 'insertCart']);
 Route::delete('/cart/delete/{productName}', [MainController::class, 'deleteCart']);
 
 // Checkout Section
-Route::post('/cart/checkout', [MainController::class, 'showCheckout']);
+Route::match(['get', 'post'], '/cart/checkout', [MainController::class, 'showCheckout']);
 Route::post('/cart/checkout/add', [MainController::class, 'insertCheckout']);
 Route::delete('/cart/checkout/delete/{productName}', [MainController::class, 'deleteCheckout']);
 
