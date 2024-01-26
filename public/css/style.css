@@ -39,7 +39,6 @@ a {
     margin: 10% auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 100%;
     max-width: 75%;
 }
 
@@ -54,22 +53,12 @@ a {
     justify-content: center;
 }
 
-.button-search-container{
-    display : flex;
-    flex-direction: row;
-    align-items: center;
-}
-
 .button-search {
     min-width : 200px;
     border : 1px solid white;
     border-radius: 8px;
     box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
     transition: ease-in-out 0.3s;
-}
-.button-featured-container{
-    display: flex;
-    justify-content: flex-end;
 }
 .button-featured {
     background-color: green;
@@ -105,17 +94,20 @@ a {
     padding: 8px 35px 8px 14px;
     margin-bottom: 20px;
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
-    background-color: #D7A933;
     border: 1px solid #fbeed5;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
-    border-radius: 4px;
+    border-radius: 16px;
+    background:green;
+    color: white;
+    font-weight: bold;
 }
 
 .alert-success {
     color: white;
-    background-color: #D7A933;
+    background-color: green;
     border-color: #d6e9c6;
+    font-weight: bold;
 }
 
 .alert-success h4 {
@@ -466,7 +458,7 @@ a {
     border : none;
 }
 .red-button:disabled {
-    background-color: #990000;;
+    background-color: #990000;
 }
 .green-button {
     width : 20%;
@@ -481,7 +473,7 @@ a {
     border : none;
 }
 .green-button:disabled {
-    background-color: #004d00;;
+    background-color: #004d00;
 }
 .green-button:active{
     transform: scale(0.95);
