@@ -1,5 +1,7 @@
 # Nikko Brewing
 
+### A craft beer brewery in Senjogahara of Okunikko which opened in April 2018. 
+
 ## E-commerce Web App
 
 ### Developed by : 
